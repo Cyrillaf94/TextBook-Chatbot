@@ -1,4 +1,4 @@
-Study MCQ
+##Study MCQ
 
 The goal is to create an MCQ generator based on textbook input
 
