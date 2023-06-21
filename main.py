@@ -10,6 +10,7 @@ from langchain.callbacks import get_openai_callback
 import os
 import pdb
 import re
+import json
 
 
 
@@ -40,6 +41,44 @@ def embed_pdf(pdf, start=None, end=None, name=None):
                     pickle.dump(VectorStore, f)
     else:
         return 'Error in processing request'
+
+
+
+def get_mcq(n_questions:int=2):
+    """Return n_questions * MCQs with only one correct answers and some explanation"""
+    questions = [
+                {
+                    "question": "What laboratory value is indicative of bile metabolism?",
+                    "choices": [
+                        "BUN",
+                        "Albumin",
+                        "Total Bilirubin",
+                        "Blood Glucose",
+                        "White Blood Cell Count"
+                    ],
+                    "answer": 2, # Total Bilirubin
+                    "explanation": "Bilirubin (bil-ih-ROO-bin) is a yellowish pigment that is made during the breakdown of red blood cells. Bilirubin passes through the liver and is eventually excreted out of the body."
+                }
+                for n in n_questions
+            ]
+    return json.dumps(questions)
+
+
+function = [
+    {"name": "get_mcq",
+     "description": "return MCQs with only one correct answers and some explanation",
+     "parameters": {
+         "type": "object",
+         "properties": {
+             "n_questions" : {
+                 "type": "int",
+                 "description" : "number of Multiple Choice Questions to generate"
+             },
+         },
+         "required" : [],
+     }
+     }
+]
 
 
 
@@ -99,5 +138,5 @@ def ask_question_on_doc(query=None):
 
 if __name__ == '__main__':
     #for book in book2_content.items():
-    embed_pdf('data/raw/Gastrointestinal.pdf', name='Gastrointestinal')
-    # ask_question_on_doc(query='gastrointestinal anatomy')
+    #embed_pdf('data/raw/Gastrointestinal.pdf', name='Gastrointestinal')
+    ask_question_on_doc(query='gastrointestinal anatomy')
